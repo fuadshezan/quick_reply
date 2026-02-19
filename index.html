@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>⚡ Quick Replies & Images</title>
+  <title>⚡ Quick Replies & Order Generator</title>
 
-  <!-- Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap"
     rel="stylesheet" />
@@ -71,6 +70,26 @@
       }
     }
 
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .app-layout {
+        grid-template-columns: 1fr 420px;
+        gap: 24px;
+        padding-right: 24px;
+      }
+    }
+
+    .main-content {
+      min-width: 0;
+    }
+
     .header {
       position: sticky;
       top: 0;
@@ -117,7 +136,8 @@
       gap: 12px;
     }
 
-    .settings-btn {
+    .settings-btn,
+    .order-btn-mobile {
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -132,10 +152,21 @@
       justify-content: center;
     }
 
-    .settings-btn:hover {
+    .settings-btn:hover,
+    .order-btn-mobile:hover {
       border-color: var(--accent);
       color: var(--accent);
       background: var(--accent-glow);
+    }
+
+    .order-btn-mobile {
+      display: none;
+    }
+
+    @media (max-width: 1023px) {
+      .order-btn-mobile {
+        display: flex;
+      }
     }
 
     .sync-status {
@@ -343,6 +374,12 @@
       align-items: start;
     }
 
+    @media (max-width: 720px) {
+      #replies-tab.replies-grid.active {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .reply-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -352,7 +389,6 @@
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
-      /* overflow: hidden; */
       overflow: visible;
     }
 
@@ -387,7 +423,6 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 5px;
-      /* margin-bottom: -5px; */
     }
 
     .reply-title {
@@ -470,18 +505,266 @@
       border: 1px solid rgba(0, 217, 255, 0.2);
     }
 
-    @media (max-width: 720px) {
-      #replies-tab.replies-grid.active {
-        grid-template-columns: 1fr;
-      }
+    .order-generator {
+      display: none;
+      position: sticky;
+      top: 80px;
+      height: calc(100vh - 100px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      overflow-y: auto;
+    }
 
-      .reply-main {
-        grid-template-columns: 1fr;
+    @media (min-width: 1024px) {
+      .order-generator {
+        display: block;
       }
+    }
 
-      .reply-image-wrap {
-        width: min(100%, 160px);
-      }
+    .order-generator::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .order-generator::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .order-generator::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .order-title {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .order-section {
+      margin-bottom: 24px;
+    }
+
+    .order-section-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: var(--bg-search);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .product-item {
+      background: var(--bg-search);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .product-row {
+      display: grid;
+      grid-template-columns: 1fr 80px;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .product-row-2 {
+      display: grid;
+      grid-template-columns: 100px 60px 1fr;
+      gap: 8px;
+    }
+
+    .remove-product-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .remove-product-btn:hover {
+      border-color: #FF4444;
+      color: #FF4444;
+      background: rgba(255, 68, 68, 0.1);
+    }
+
+    .add-product-btn {
+      width: 100%;
+      background: var(--bg-search);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    .add-product-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .generate-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--success));
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      color: var(--bg-main);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--accent-glow);
+    }
+
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+
+    .receipt-output {
+      background: var(--bg-search);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      display: none;
+    }
+
+    .receipt-output.show {
+      display: block;
+    }
+
+    .copy-receipt-btn {
+      width: 100%;
+      background: var(--bg-search);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 12px;
+      font-family: 'Bricolage Grotesque', sans-serif;
+    }
+
+    .copy-receipt-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .product-search-wrapper {
+      position: relative;
+    }
+
+    .product-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+      display: none;
+      margin-top: 4px;
+      box-shadow: var(--shadow);
+    }
+
+    .product-dropdown.show {
+      display: block;
+    }
+
+    .product-dropdown-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .product-dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .product-dropdown-item:hover {
+      background: var(--bg-search);
+      color: var(--accent);
     }
 
     .product-folder {
@@ -654,6 +937,7 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
     }
 
     .modal-overlay.show {
@@ -671,6 +955,7 @@
       animation: modalIn 0.3s ease;
       max-height: 90vh;
       overflow-y: auto;
+      margin: auto;
     }
 
     @keyframes modalIn {
@@ -792,44 +1077,104 @@
 
 <body>
 
-  <header class="header">
-    <div class="header-top">
-      <div class="logo">Quick Replies</div>
-      <div class="header-actions">
-        <div class="sync-status">
-          <span class="sync-dot"></span>
-          <span id="sync-text">Live</span>
+  <div class="app-layout">
+    <div class="main-content">
+      <header class="header">
+        <div class="header-top">
+          <div class="logo">Quick Replies</div>
+          <div class="header-actions">
+            <div class="sync-status">
+              <span class="sync-dot"></span>
+              <span id="sync-text">Live</span>
+            </div>
+            <button class="order-btn-mobile" onclick="openOrderModal()" title="Order Generator">📝</button>
+            <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
+          </div>
         </div>
-        <button class="settings-btn" onclick="openSettings()" title="Settings">
-          ⚙️
-        </button>
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('replies')">💬 Replies</button>
+          <button class="tab" onclick="switchTab('images')">🖼️ Images</button>
+        </div>
+      </header>
+
+      <div class="search-container">
+        <div class="search-wrapper">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-input" placeholder="Search..." autocomplete="off" />
+          </div>
+          <button class="reload-btn" id="reload-btn" title="Reload">🔄</button>
+        </div>
+      </div>
+
+      <div class="categories" id="categories">
+        <div class="category-chip active" data-category="">All</div>
+      </div>
+
+      <div class="content">
+        <div class="tab-content active" id="replies-tab"></div>
+        <div class="tab-content" id="images-tab"></div>
       </div>
     </div>
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('replies')">💬 Replies</button>
-      <button class="tab" onclick="switchTab('images')">🖼️ Images</button>
-    </div>
-  </header>
 
-  <div class="search-container">
-    <div class="search-wrapper">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-input" placeholder="Search..." autocomplete="off" />
+    <div class="order-generator" id="order-generator">
+      <div class="order-title">📝 Order Receipt</div>
+
+      <div class="order-section">
+        <div class="order-section-title">Customer Info</div>
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-input" id="customer-name" placeholder="Customer name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="tel" class="form-input" id="customer-phone" placeholder="01XXXXXXXXX" maxlength="11" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <textarea class="form-textarea" id="customer-address" placeholder="Delivery address"></textarea>
+        </div>
       </div>
-      <button class="reload-btn" id="reload-btn" title="Reload">
-        🔄
-      </button>
+
+      <div class="order-section">
+        <div class="order-section-title">Products</div>
+        <div id="products-container"></div>
+        <button class="add-product-btn" onclick="addProduct()">+ Add Product</button>
+      </div>
+
+      <div class="order-section">
+        <div class="form-group">
+          <label class="form-label">Delivery Charge</label>
+          <select class="form-select" id="delivery-charge">
+            <option value="70">70 Tk</option>
+            <option value="90">90 Tk</option>
+            <option value="100">100 Tk</option>
+            <option value="110">110 Tk</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discount (optional)</label>
+          <input type="number" class="form-input" id="discount" placeholder="0" min="0" />
+        </div>
+      </div>
+
+      <div class="order-section">
+        <div class="form-group">
+          <label class="form-label">Custom Design (optional)</label>
+          <textarea class="form-textarea" id="custom-design" placeholder="Any custom design requests"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes (optional)</label>
+          <textarea class="form-textarea" id="notes" placeholder="Additional notes"></textarea>
+        </div>
+      </div>
+
+      <button class="generate-btn" onclick="generateReceipt()">Generate Receipt</button>
+
+      <div class="receipt-output" id="receipt-output"></div>
+      <button class="copy-receipt-btn" id="copy-receipt-btn" onclick="copyReceipt()" style="display:none;">Copy
+        Receipt</button>
     </div>
-  </div>
-
-  <div class="categories" id="categories">
-    <div class="category-chip active" data-category="">All</div>
-  </div>
-
-  <div class="content">
-    <div class="tab-content active" id="replies-tab"></div>
-    <div class="tab-content" id="images-tab"></div>
   </div>
 
   <div class="toast" id="toast">
@@ -844,35 +1189,49 @@
     </div>
   </div>
 
-  <!-- Settings Modal -->
   <div class="modal-overlay" id="settings-modal">
     <div class="modal">
       <h2 class="modal-title">⚙️ Settings</h2>
-      <p class="modal-desc">Set separate Google Sheets sources for Saved Replies and Image Gallery. Use either a Sheet
-        ID or full published CSV URL for each.</p>
+      <p class="modal-desc">Set separate Google Sheets sources for Saved Replies and Image Gallery.</p>
 
-      <div class="current-config" id="current-config-display">
-        <span class="config-label">Current Replies Source:</span>
+      <div class="current-config">
+        <span class="config-label">Replies:</span>
         <span id="current-replies-config-value">Not configured</span>
-        <span class="config-label" style="margin-top: 10px;">Current Images Source:</span>
+        <span class="config-label" style="margin-top:10px;">Images:</span>
         <span id="current-images-config-value">Not configured</span>
       </div>
 
-      <label class="modal-label">Saved Replies Sheet URL or ID</label>
-      <textarea class="modal-textarea" id="sheets-replies-config-input" placeholder="Paste either:
-- Full URL: https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?...
-- Sheet ID: 1A2B3C4D5E..."></textarea>
+      <label class="modal-label">Saved Replies Sheet</label>
+      <textarea class="modal-textarea" id="sheets-replies-config-input" placeholder="URL or Sheet ID"></textarea>
 
-      <label class="modal-label">Image Gallery Sheet URL or ID</label>
-      <textarea class="modal-textarea" id="sheets-images-config-input" placeholder="Paste either:
-- Full URL: https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?...
-- Sheet ID: 1A2B3C4D5E..."></textarea>
+      <label class="modal-label">Image Gallery Sheet</label>
+      <textarea class="modal-textarea" id="sheets-images-config-input" placeholder="URL or Sheet ID"></textarea>
 
       <button class="modal-btn" onclick="saveConfig()">Save & Reload</button>
       <button class="modal-btn modal-btn-secondary" onclick="closeSettings()">Cancel</button>
     </div>
   </div>
 
+  <div class="modal-overlay" id="order-modal">
+    <div class="modal" style="max-width:600px;">
+      <h2 class="modal-title">📝 Order Receipt</h2>
+      <div id="order-form-mobile"></div>
+      <button class="modal-btn modal-btn-secondary" onclick="closeOrderModal()">Close</button>
+    </div>
+  </div>
+
+  <style>
+    /* ... existing styles ... */
+    #order-modal .order-generator {
+      display: block !important;
+      position: static;
+      height: auto;
+      border: none;
+      padding: 0;
+      background: transparent;
+      overflow: visible;
+    }
+  </style>
   <script>
     const LEGACY_SHEETS_CONFIG = localStorage.getItem('SHEETS_CONFIG') || '';
     let REPLIES_SHEETS_CONFIG = localStorage.getItem('REPLIES_SHEETS_CONFIG') || LEGACY_SHEETS_CONFIG;
@@ -882,6 +1241,7 @@
     let filteredReplies = [];
     let activeCategory = '';
     let activeTab = 'replies';
+    let productCounter = 0;
 
     document.addEventListener('DOMContentLoaded', () => {
       if (!REPLIES_SHEETS_CONFIG || !IMAGES_SHEETS_CONFIG) {
@@ -892,6 +1252,8 @@
 
       document.getElementById('search-input').addEventListener('input', handleSearch);
       document.getElementById('reload-btn').addEventListener('click', loadData);
+
+      addProduct();
     });
 
     function openSettings() {
@@ -899,12 +1261,8 @@
       document.getElementById('sheets-replies-config-input').value = REPLIES_SHEETS_CONFIG;
       document.getElementById('sheets-images-config-input').value = IMAGES_SHEETS_CONFIG;
 
-      const repliesDisplay = REPLIES_SHEETS_CONFIG
-        ? (REPLIES_SHEETS_CONFIG.length > 60 ? REPLIES_SHEETS_CONFIG.substring(0, 60) + '...' : REPLIES_SHEETS_CONFIG)
-        : 'Not configured';
-      const imagesDisplay = IMAGES_SHEETS_CONFIG
-        ? (IMAGES_SHEETS_CONFIG.length > 60 ? IMAGES_SHEETS_CONFIG.substring(0, 60) + '...' : IMAGES_SHEETS_CONFIG)
-        : 'Not configured';
+      const repliesDisplay = REPLIES_SHEETS_CONFIG ? (REPLIES_SHEETS_CONFIG.length > 60 ? REPLIES_SHEETS_CONFIG.substring(0, 60) + '...' : REPLIES_SHEETS_CONFIG) : 'Not configured';
+      const imagesDisplay = IMAGES_SHEETS_CONFIG ? (IMAGES_SHEETS_CONFIG.length > 60 ? IMAGES_SHEETS_CONFIG.substring(0, 60) + '...' : IMAGES_SHEETS_CONFIG) : 'Not configured';
 
       document.getElementById('current-replies-config-value').textContent = repliesDisplay;
       document.getElementById('current-images-config-value').textContent = imagesDisplay;
@@ -919,7 +1277,7 @@
       const imagesInput = document.getElementById('sheets-images-config-input').value.trim();
 
       if (!repliesInput || !imagesInput) {
-        alert('Please enter both Saved Replies and Image Gallery sheet URL/ID');
+        alert('Please enter both sheet URLs/IDs');
         return;
       }
 
@@ -937,15 +1295,11 @@
       if (!config) return '';
 
       if (config.includes('docs.google.com')) {
-        if (config.includes('output=csv')) {
-          return config;
-        }
-
+        if (config.includes('output=csv')) return config;
         const idMatch = config.match(/\/d\/([a-zA-Z0-9-_]+)/);
         if (idMatch && idMatch[1]) {
           return `https://docs.google.com/spreadsheets/d/${idMatch[1]}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
         }
-
         const separator = config.includes('?') ? '&' : '?';
         return `${config}${separator}output=csv`;
       }
@@ -961,7 +1315,7 @@
       try {
         const repliesUrl = buildSheetUrl(REPLIES_SHEETS_CONFIG, 'SavedReplies');
         const imagesUrl = buildSheetUrl(IMAGES_SHEETS_CONFIG, 'Images');
-        console.log('🔗 Fetching from:', repliesUrl, 'and', imagesUrl);
+
         const repliesResponse = await fetch(repliesUrl);
         const repliesCsv = await repliesResponse.text();
         allReplies = parseRepliesCSV(repliesCsv);
@@ -971,7 +1325,6 @@
         allProducts = parseImagesCSV(imagesCsv);
 
         console.log('✅ Loaded:', allReplies.length, 'replies,', Object.keys(allProducts).length, 'products');
-        console.log(allProducts);
 
         renderCategories();
         filterReplies();
@@ -1028,46 +1381,17 @@
       }
     }
 
-    // function parseRepliesCSV(csv) {
-    //   const lines = csv.split('\n').filter(line => line.trim());
-    //   const replies = [];
-    //   console.log(lines);
-    //   for (let i = 1; i < lines.length; i++) {
-    //     const values = parseCSVLine(lines[i]);
-    //     if (values.length < 2) continue;
-
-    //     let imageUrl = values[3] || '';
-    //     const match = imageUrl.match(/__(.+?)__/);
-    //     if (match) imageUrl = match[1].trim();
-
-    //     replies.push({
-    //       title: values[0] || '',
-    //       category: values[1] || 'General',
-    //       description: values[2] || '',
-    //       imageUrl: imageUrl
-    //     });
-    //   }
-
-    //   return replies;
-    // }
     function normalizeImageUrl(url) {
       const trimmed = (url || '').trim();
       if (!trimmed) return '';
-
-      if (trimmed.startsWith('http://')) {
-        return `https://${trimmed.slice(7)}`;
-      }
-
+      if (trimmed.startsWith('http://')) return `https://${trimmed.slice(7)}`;
       return trimmed;
     }
+
     function unwrapImageUrl(value) {
       if (!value) return '';
       value = value.trim();
-
-      if (value.startsWith('__') && value.endsWith('__')) {
-        return value.slice(2, -2);
-      }
-
+      if (value.startsWith('__') && value.endsWith('__')) return value.slice(2, -2);
       return value;
     }
 
@@ -1087,12 +1411,10 @@
           } else {
             inQuotes = !inQuotes;
           }
-        }
-        else if (char === '\n' && !inQuotes) {
+        } else if (char === '\n' && !inQuotes) {
           rows.push(current);
           current = '';
-        }
-        else {
+        } else {
           current += char;
         }
       }
@@ -1106,22 +1428,20 @@
         if (values.length < 2) continue;
 
         let imageUrl = values[3] || '';
-        // const match = imageUrl.match(/__(.+?)__/);
-        // if (match) imageUrl = match[1].trim();
-        imageUrl=unwrapImageUrl(imageUrl);
+        imageUrl = unwrapImageUrl(imageUrl);
         imageUrl = normalizeImageUrl(imageUrl);
 
         replies.push({
           title: values[0] || '',
           category: values[1] || 'General',
           description: values[2] || '',
-          imageUrl
+          imageUrl,
+          price: parseFloat(values[4]) || 0
         });
       }
 
       return replies;
     }
-
 
     function parseImagesCSV(csv) {
       const lines = csv.split('\n').filter(line => line.trim());
@@ -1130,7 +1450,7 @@
       for (let i = 1; i < lines.length; i++) {
         const values = parseCSVLine(lines[i]);
         if (values.length < 2) continue;
-        // console.log(values);
+
         const productName = values[0] || '';
         let imageUrls = values[1] || '';
 
@@ -1140,7 +1460,7 @@
         while ((match = regex.exec(imageUrls)) !== null) {
           urls.push(match[1].trim());
         }
-        console.log('Extracted URLs for', productName, ':', urls);
+
         if (urls.length > 0) {
           products[productName] = urls;
         }
@@ -1264,77 +1584,13 @@
 
     async function copyReply(index) {
       const reply = filteredReplies[index];
-      const description = reply.description || '';
-      const imageUrl = normalizeImageUrl(reply.imageUrl);
-      const canWriteRichClipboard = !!(window.ClipboardItem && navigator.clipboard?.write);
-
-      if (!window.isSecureContext) {
-        await navigator.clipboard.writeText(description);
-        showToast('Copied text only (requires HTTPS for image copy)');
-        return;
-      }
-
       try {
-        if (imageUrl && canWriteRichClipboard) {
-          const response = await fetch(imageUrl, {
-            mode: 'cors',
-            credentials: 'omit',
-            cache: 'no-store'
-          });
-
-          if (!response.ok) {
-            throw new Error(`Image fetch failed (${response.status})`);
-          }
-
-          let imageBlob = await response.blob();
-          if (!imageBlob.type || !imageBlob.type.startsWith('image/')) {
-            throw new Error('URL did not return an image file');
-          }
-
-          if (ClipboardItem.supports && !ClipboardItem.supports(imageBlob.type)) {
-            const bitmap = await createImageBitmap(imageBlob);
-            const canvas = document.createElement('canvas');
-            canvas.width = bitmap.width;
-            canvas.height = bitmap.height;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) throw new Error('Canvas unavailable for conversion');
-            ctx.drawImage(bitmap, 0, 0);
-            imageBlob = await new Promise((resolve, reject) => {
-              canvas.toBlob((blob) => {
-                if (blob) resolve(blob);
-                else reject(new Error('PNG conversion failed'));
-              }, 'image/png');
-            });
-          }
-
-          const imageDataUrl = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = () => reject(new Error('Failed to build image data URL'));
-            reader.readAsDataURL(imageBlob);
-          });
-
-          const textHtml = escapeHtml(description).replace(/\n/g, '<br>');
-          const html = `<div><p style="margin:0 0 8px 0;">${textHtml}</p><img src="${imageDataUrl}" alt="image" /></div>`;
-          const item = new ClipboardItem({
-            'text/plain': new Blob([description], { type: 'text/plain' }),
-            'text/html': new Blob([html], { type: 'text/html' })
-          });
-
-          await navigator.clipboard.write([item]);
-          showToast('Copied text + image (paste into rich editor)');
-          return;
-        }
-
-        await navigator.clipboard.writeText(description);
-        showToast('Copied text');
+        await navigator.clipboard.writeText(reply.description);
+        showToast('✓ Copied to clipboard!');
       } catch (error) {
-        await navigator.clipboard.writeText(description);
-        const reason = (error && error.message) ? error.message : 'Image blocked by CORS or browser policy';
-        showToast(`Copied text only: ${reason}`);
+        showToast('⚠️ Failed to copy');
       }
     }
-
 
     function renderImagesTab() {
       const query = document.getElementById('search-input').value.toLowerCase();
@@ -1387,6 +1643,271 @@
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
+    }
+
+    function addProduct(container) {
+      const id = productCounter++;
+      const targetContainer = container || document.getElementById('products-container');
+
+      const productHtml = `
+        <div class="product-item" data-product-id="${id}">
+          ${targetContainer.children.length > 0 ? `<button class="remove-product-btn" onclick="removeProduct(${id})">×</button>` : ''}
+          <div class="product-row">
+            <div class="form-group">
+              <label class="form-label">Product</label>
+              <div class="product-search-wrapper">
+                <input type="text" class="form-input product-search" data-product-id="${id}" placeholder="Search product..." autocomplete="off" />
+                <div class="product-dropdown" data-product-id="${id}"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price</label>
+              <input type="number" class="form-input product-price" data-product-id="${id}" placeholder="0" min="0" step="0.01" readonly />
+            </div>
+          </div>
+          <div class="product-row-2">
+            <div class="form-group">
+              <label class="form-label">Color</label>
+              <select class="form-select product-color" data-product-id="${id}">
+                <option value="Golden">Golden</option>
+                <option value="Silver">Silver</option>
+                <option value="Black">Black</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Qty</label>
+              <input type="number" class="form-input product-qty" data-product-id="${id}" value="1" min="1" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total</label>
+              <input type="number" class="form-input product-total" data-product-id="${id}" min="0" step="0.01" />
+            </div>
+          </div>
+        </div>
+      `;
+
+      targetContainer.insertAdjacentHTML('beforeend', productHtml);
+
+      const productItem = targetContainer.querySelector(`[data-product-id="${id}"]`);
+      const searchInput = productItem.querySelector('.product-search');
+      const qtyInput = productItem.querySelector('.product-qty');
+
+      searchInput.addEventListener('input', () => filterProducts(id, productItem.closest('.order-generator, .order-generator')));
+      searchInput.addEventListener('focus', () => filterProducts(id, productItem.closest('.order-generator, .order-generator')));
+      qtyInput.addEventListener('input', () => calculateProductTotal(id, productItem.closest('.order-generator, .order-generator')));
+    }
+
+    function removeProduct(id) {
+      document.querySelectorAll(`[data-product-id="${id}"]`).forEach(el => {
+        if (el.classList.contains('product-item')) el.remove();
+      });
+    }
+
+    function filterProducts(id, container) {
+      const productItem = container.querySelector(`.product-item[data-product-id="${id}"]`);
+      if (!productItem) return;
+
+      const input = productItem.querySelector('.product-search');
+      const query = input.value.toLowerCase();
+      const dropdown = productItem.querySelector('.product-dropdown');
+
+      if (!query) {
+        dropdown.classList.remove('show');
+        return;
+      }
+
+      const filtered = allReplies.filter(r => r.title.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        dropdown.classList.remove('show');
+        return;
+      }
+
+      dropdown.innerHTML = filtered.map(r => `
+        <div class="product-dropdown-item" onclick="selectProduct(${id}, '${escapeHtml(r.title).replace(/'/g, "\\'")}', ${r.price})">
+          ${escapeHtml(r.title)} - ${r.price} Tk
+        </div>
+      `).join('');
+
+      dropdown.classList.add('show');
+    }
+
+    function selectProduct(id, title, price) {
+      document.querySelectorAll(`.product-search[data-product-id="${id}"]`).forEach(input => {
+        input.value = title;
+      });
+      document.querySelectorAll(`.product-price[data-product-id="${id}"]`).forEach(input => {
+        input.value = price;
+      });
+      document.querySelectorAll(`.product-dropdown[data-product-id="${id}"]`).forEach(dropdown => {
+        dropdown.classList.remove('show');
+      });
+
+      const containers = [document.getElementById('order-generator'), document.querySelector('#order-form-mobile .order-generator')];
+      containers.forEach(container => {
+        if (container) calculateProductTotal(id, container);
+      });
+    }
+
+    function calculateProductTotal(id, container) {
+      const productItem = container.querySelector(`.product-item[data-product-id="${id}"]`);
+      if (!productItem) return;
+
+      const priceInput = productItem.querySelector('.product-price');
+      const qtyInput = productItem.querySelector('.product-qty');
+      const totalInput = productItem.querySelector('.product-total');
+
+      const price = parseFloat(priceInput.value) || 0;
+      const qty = parseInt(qtyInput.value) || 1;
+
+      totalInput.value = (price * qty).toFixed(2);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.product-search-wrapper')) {
+        document.querySelectorAll('.product-dropdown').forEach(d => d.classList.remove('show'));
+      }
+    });
+
+    function generateReceipt(isMobile) {
+      const suffix = isMobile ? '-mobile' : '';
+
+      const name = document.getElementById(`customer-name${suffix}`).value.trim();
+      const phone = document.getElementById(`customer-phone${suffix}`).value.trim();
+      const address = document.getElementById(`customer-address${suffix}`).value.trim();
+
+      if (!name || !phone || !address) {
+        alert('Please fill in customer name, phone, and address');
+        return;
+      }
+
+      const container = isMobile ? document.getElementById('products-container-mobile') : document.getElementById('products-container');
+      const products = [];
+
+      container.querySelectorAll('.product-item').forEach(item => {
+        const id = item.dataset.productId;
+        const productName = item.querySelector('.product-search').value.trim();
+        const price = parseFloat(item.querySelector('.product-price').value) || 0;
+        const color = item.querySelector('.product-color').value;
+        const qty = parseInt(item.querySelector('.product-qty').value) || 1;
+        const total = parseFloat(item.querySelector('.product-total').value) || 0;
+
+        if (productName && price > 0) {
+          products.push({ name: productName, color, qty, price, total });
+        }
+      });
+
+      if (products.length === 0) {
+        alert('Please add at least one product');
+        return;
+      }
+
+      const deliveryCharge = parseFloat(document.getElementById(`delivery-charge${suffix}`).value);
+      const discount = parseFloat(document.getElementById(`discount${suffix}`).value) || 0;
+      const customDesign = document.getElementById(`custom-design${suffix}`).value.trim();
+      const notes = document.getElementById(`notes${suffix}`).value.trim();
+
+      const productsTotal = products.reduce((sum, p) => sum + p.total, 0);
+      const totalBill = productsTotal + deliveryCharge - discount;
+
+      let receipt = `Name: ${name}\nPhone: ${phone}\nAddress: ${address}\n\nProducts:\n`;
+
+      products.forEach(p => {
+        receipt += `${p.name} - ${p.color} - ${p.qty} - ${p.total} Tk\n`;
+      });
+
+      receipt += `\nDelivery Charge: ${deliveryCharge} Tk`;
+      if (discount > 0) receipt += `\nDiscount: ${discount} Tk`;
+      receipt += `\nTotal Bill: ${totalBill} Tk`;
+
+      if (customDesign) receipt += `\n\nCustom Design: ${customDesign}`;
+      if (notes) receipt += `\n\nNotes: ${notes}`;
+
+      document.getElementById(`receipt-output${suffix}`).textContent = receipt;
+      document.getElementById(`receipt-output${suffix}`).classList.add('show');
+      document.getElementById(`copy-receipt-btn${suffix}`).style.display = 'block';
+    }
+
+    async function copyReceipt(isMobile) {
+      const suffix = isMobile ? '-mobile' : '';
+      const receipt = document.getElementById(`receipt-output${suffix}`).textContent;
+      try {
+        await navigator.clipboard.writeText(receipt);
+        showToast('✓ Receipt copied!');
+      } catch (error) {
+        showToast('⚠️ Failed to copy');
+      }
+    }
+
+    function openOrderModal() {
+      const modal = document.getElementById('order-modal');
+      const mobileContainer = document.getElementById('order-form-mobile');
+
+      mobileContainer.innerHTML = `
+        <div class="order-generator">
+          <div class="order-section">
+            <div class="order-section-title">Customer Info</div>
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-input" id="customer-name-mobile" placeholder="Customer name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-input" id="customer-phone-mobile" placeholder="01XXXXXXXXX" maxlength="11" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <textarea class="form-textarea" id="customer-address-mobile" placeholder="Delivery address"></textarea>
+            </div>
+          </div>
+
+          <div class="order-section">
+            <div class="order-section-title">Products</div>
+            <div id="products-container-mobile"></div>
+            <button class="add-product-btn" onclick="addProduct(document.getElementById('products-container-mobile'))">+ Add Product</button>
+          </div>
+
+          <div class="order-section">
+            <div class="form-group">
+              <label class="form-label">Delivery Charge</label>
+              <select class="form-select" id="delivery-charge-mobile">
+                <option value="70">70 Tk</option>
+                <option value="90">90 Tk</option>
+                <option value="100">100 Tk</option>
+                <option value="110">110 Tk</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Discount (optional)</label>
+              <input type="number" class="form-input" id="discount-mobile" placeholder="0" min="0" />
+            </div>
+          </div>
+
+          <div class="order-section">
+            <div class="form-group">
+              <label class="form-label">Custom Design (optional)</label>
+              <textarea class="form-textarea" id="custom-design-mobile" placeholder="Any custom design requests"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notes (optional)</label>
+              <textarea class="form-textarea" id="notes-mobile" placeholder="Additional notes"></textarea>
+            </div>
+          </div>
+
+          <button class="generate-btn" onclick="generateReceipt(true)">Generate Receipt</button>
+
+          <div class="receipt-output" id="receipt-output-mobile"></div>
+          <button class="copy-receipt-btn" id="copy-receipt-btn-mobile" onclick="copyReceipt(true)" style="display:none;">Copy Receipt</button>
+        </div>
+      `;
+
+      addProduct(document.getElementById('products-container-mobile'));
+
+      modal.classList.add('show');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.remove('show');
     }
   </script>
 
